@@ -18,6 +18,10 @@ public protocol ServiceUIPlugin {
     var serviceType: ServiceUI.Type? { get }
 }
 
+public protocol MealEntryManagerUIPlugin {
+    var mealEntryManagerType: MealEntryManagerUI.Type? { get }
+}
+
 public protocol OnboardingUIPlugin {
     var onboardingType: OnboardingUI.Type? { get }
 }

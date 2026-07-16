@@ -305,6 +305,9 @@
 		43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E620DCBC55002B996B /* RadioSelectionTableViewController.swift */; };
 		43FB60E920DCBE64002B996B /* PumpManagerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */; };
 		43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB610620DDF19B002B996B /* PumpManagerError.swift */; };
+		84AB0A6A30088ACE00A13446 /* MealNutrition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB0A6930088ACE00A13446 /* MealNutrition.swift */; };
+		84AB0A6D30088AD900A13446 /* MealEntryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB0A6C30088AD900A13446 /* MealEntryManager.swift */; };
+		84AB0A7130088AED00A13446 /* MealEntryManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB0A7030088AED00A13446 /* MealEntryManagerUI.swift */; };
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */; };
 		89186C0724BF7FC70003D0F3 /* Guardrail+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */; };
@@ -1363,6 +1366,9 @@
 		43FB60E620DCBC55002B996B /* RadioSelectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSelectionTableViewController.swift; sourceTree = "<group>"; };
 		43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerStatus.swift; sourceTree = "<group>"; };
 		43FB610620DDF19B002B996B /* PumpManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerError.swift; sourceTree = "<group>"; };
+		84AB0A6930088ACE00A13446 /* MealNutrition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealNutrition.swift; sourceTree = "<group>"; };
+		84AB0A6C30088AD900A13446 /* MealEntryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealEntryManager.swift; sourceTree = "<group>"; };
+		84AB0A7030088AED00A13446 /* MealEntryManagerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealEntryManagerUI.swift; sourceTree = "<group>"; };
 		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
 		89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlTableViewCell.swift; sourceTree = "<group>"; };
@@ -2315,6 +2321,7 @@
 				B4D4C20B25F95A6700DA809D /* ViewModels */,
 				4369F090208B0D68000E3E45 /* Views */,
 				E9086B2E24B3A5080062F5C8 /* ChartColorPalette.swift */,
+				84AB0A6F30088AED00A13446 /* MealEntry */,
 			);
 			path = LoopKitUI;
 			sourceTree = "<group>";
@@ -2466,6 +2473,7 @@
 				C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */,
 				43CACE0D2247F89100F90AF5 /* WeakSynchronizedSet.swift */,
 				B4A2ABEE2AAB5160007E3EC1 /* Pluggable.swift */,
+				84AB0A6830088ACE00A13446 /* MealEntry */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -2749,6 +2757,23 @@
 				43D8FE661C7292950073BE78 /* read_carb_ratios.json */,
 			);
 			path = Fixtures;
+			sourceTree = "<group>";
+		};
+		84AB0A6830088ACE00A13446 /* MealEntry */ = {
+			isa = PBXGroup;
+			children = (
+				84AB0A6930088ACE00A13446 /* MealNutrition.swift */,
+				84AB0A6C30088AD900A13446 /* MealEntryManager.swift */,
+			);
+			path = MealEntry;
+			sourceTree = "<group>";
+		};
+		84AB0A6F30088AED00A13446 /* MealEntry */ = {
+			isa = PBXGroup;
+			children = (
+				84AB0A7030088AED00A13446 /* MealEntryManagerUI.swift */,
+			);
+			path = MealEntry;
 			sourceTree = "<group>";
 		};
 		892A5D35222F03CB008961AB /* LoopTestingKit */ = {
@@ -4032,6 +4057,7 @@
 				C16DA84522E9330A008624C2 /* LoopUIPlugin.swift in Sources */,
 				E93C86A624C8F7D90073089B /* ChartSettings+LoopKitUI.swift in Sources */,
 				B46B62AD23FF0A87001E69BA /* LabeledDateView.swift in Sources */,
+				84AB0A7130088AED00A13446 /* MealEntryManagerUI.swift in Sources */,
 				895FE06E22011E9A00FCF18A /* OverrideEmojiDataSource.swift in Sources */,
 				1452F4B02A85219100F8B9E4 /* AbsorptionTimePickerRow.swift in Sources */,
 				B43DA43F24D49AA400CAFF4E /* GuidanceColors.swift in Sources */,
@@ -4202,6 +4228,7 @@
 				C1D476BA2A8ED3E8002C1C87 /* GlucosePredictionAlgorithm.swift in Sources */,
 				433BC7AD20538FCA000B1200 /* StoredGlucoseSample.swift in Sources */,
 				43D8FDF91C7290350073BE78 /* GlucoseEffect.swift in Sources */,
+				84AB0A6D30088AD900A13446 /* MealEntryManager.swift in Sources */,
 				A932803B2798D63B0091D0A1 /* SyncAlertObject.swift in Sources */,
 				1D841AAD24577EE10069DBFF /* AlertSoundPlayer.swift in Sources */,
 				C19E776B2A61FD8A003F06C5 /* RetrospectiveCorrection.swift in Sources */,
@@ -4246,6 +4273,7 @@
 				89AE2232228BC68600BDFD85 /* UnfairLock.swift in Sources */,
 				A9FD046F24E310D00040F203 /* HKObject.swift in Sources */,
 				1DC64C7E24BF6EBC004A63A1 /* DeliveryLimits.swift in Sources */,
+				84AB0A6A30088ACE00A13446 /* MealNutrition.swift in Sources */,
 				C168CA7A280DD00F002BD2A7 /* Model.xcdatamodeld in Sources */,
 				C1D476B92A8ED3E8002C1C87 /* LoopAlgorithm.swift in Sources */,
 				4322B770202FA26F0002837D /* GlucoseStore.swift in Sources */,
@@ -5277,6 +5305,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -5310,6 +5339,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};

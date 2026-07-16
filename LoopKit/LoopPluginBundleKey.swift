@@ -12,6 +12,8 @@ public enum LoopPluginBundleKey: String {
     case cgmManagerDisplayName = "com.loopkit.Loop.CGMManagerDisplayName"
     case cgmManagerIdentifier = "com.loopkit.Loop.CGMManagerIdentifier"
     case extensionIdentifier = "com.loopkit.Loop.ExtensionIdentifier"
+    case mealEntryManagerDisplayName = "com.loopkit.Loop.MealEntryManagerDisplayName"
+    case mealEntryManagerIdentifier = "com.loopkit.Loop.MealEntryManagerIdentifier"
     case onboardingIdentifier = "com.loopkit.Loop.OnboardingIdentifier"
     case pluginIsSimulator = "com.loopkit.Loop.PluginIsSimulator"
     case pumpManagerDisplayName = "com.loopkit.Loop.PumpManagerDisplayName"

@@ -15,13 +15,17 @@ public struct StoredFavoriteFood: FavoriteFood, Identifiable {
     public var carbsQuantity: HKQuantity
     public var foodType: String
     public var absorptionTime: TimeInterval
-    
-    public init(id: String = UUID().uuidString, name: String, carbsQuantity: HKQuantity, foodType: String, absorptionTime: TimeInterval) {
+    public var fatQuantity: HKQuantity?
+    public var proteinQuantity: HKQuantity?
+
+    public init(id: String = UUID().uuidString, name: String, carbsQuantity: HKQuantity, foodType: String, absorptionTime: TimeInterval, fatQuantity: HKQuantity? = nil, proteinQuantity: HKQuantity? = nil) {
         self.id = id
         self.name = name
         self.carbsQuantity = carbsQuantity
         self.foodType = foodType
         self.absorptionTime = absorptionTime
+        self.fatQuantity = fatQuantity
+        self.proteinQuantity = proteinQuantity
     }
 }
 
@@ -39,10 +43,12 @@ extension StoredFavoriteFood: Codable {
             name: try container.decode(String.self, forKey: .name),
             carbsQuantity: HKQuantity(unit: .gram(), doubleValue: try container.decode(Double.self, forKey: .carbsQuantity)),
             foodType: try container.decode(String.self, forKey: .foodType),
-            absorptionTime: try container.decode(TimeInterval.self, forKey: .absorptionTime)
+            absorptionTime: try container.decode(TimeInterval.self, forKey: .absorptionTime),
+            fatQuantity: try container.decodeIfPresent(Double.self, forKey: .fatQuantity).map { HKQuantity(unit: .gram(), doubleValue: $0) },
+            proteinQuantity: try container.decodeIfPresent(Double.self, forKey: .proteinQuantity).map { HKQuantity(unit: .gram(), doubleValue: $0) }
         )
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
@@ -50,13 +56,17 @@ extension StoredFavoriteFood: Codable {
         try container.encode(carbsQuantity.doubleValue(for: .gram()), forKey: .carbsQuantity)
         try container.encode(foodType, forKey: .foodType)
         try container.encode(absorptionTime, forKey: .absorptionTime)
+        try container.encodeIfPresent(fatQuantity?.doubleValue(for: .gram()), forKey: .fatQuantity)
+        try container.encodeIfPresent(proteinQuantity?.doubleValue(for: .gram()), forKey: .proteinQuantity)
     }
-    
+
     private enum CodingKeys: String, CodingKey {
         case id
         case name
         case carbsQuantity
         case foodType
         case absorptionTime
+        case fatQuantity
+        case proteinQuantity
     }
 }

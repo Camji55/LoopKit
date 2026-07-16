@@ -13,9 +13,19 @@ public protocol FavoriteFood {
     var carbsQuantity: HKQuantity { get }
     var foodType: String { get }
     var absorptionTime: TimeInterval { get }
+
+    /// Total fat in the favorite, if entered via macros. Optional; nil for emoji-entered favorites.
+    var fatQuantity: HKQuantity? { get }
+
+    /// Total protein in the favorite, if entered via macros. Optional; nil for emoji-entered favorites.
+    var proteinQuantity: HKQuantity? { get }
 }
 
 extension FavoriteFood {
+    // Default nil so existing conformers and stored favorites remain valid without macros.
+    public var fatQuantity: HKQuantity? { nil }
+    public var proteinQuantity: HKQuantity? { nil }
+
     public var title: String {
         return name + " " + foodType
     }

@@ -6692,6 +6692,9 @@
         }
       }
     },
+    "Bolus" : {
+
+    },
     "Cancel" : {
       "comment" : "Button text to cancel adding a new schedule item\nCancel editing settings button title\nThe text for the scheduled custom preset cancel button\nThe title of the cancel action in an action sheet",
       "localizations" : {
@@ -7880,6 +7883,9 @@
           }
         }
       }
+    },
+    "COB" : {
+
     },
     "com.loudnate.CarbKit.COBDateLabel" : {
       "comment" : "The format string describing the date of a COB value. The first format argument is the localized date.",
@@ -11279,6 +11285,9 @@
         }
       }
     },
+    "Dose" : {
+
+    },
     "Duration" : {
       "comment" : "The text for the custom preset duration setting\nThe text for the override duration setting",
       "localizations" : {
@@ -12164,6 +12173,9 @@
         }
       }
     },
+    "Effect" : {
+
+    },
     "Enable" : {
       "comment" : "The button text for enabling a temporary override",
       "localizations" : {
@@ -12604,6 +12616,9 @@
           }
         }
       }
+    },
+    "End" : {
+
     },
     "End Time" : {
       "comment" : "The text for the override start time",
@@ -14208,6 +14223,9 @@
           }
         }
       }
+    },
+    "Glucose" : {
+
     },
     "Go Back" : {
       "comment" : "Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range\nText for go back action on confirmation alert",
@@ -16800,6 +16818,9 @@
         }
       }
     },
+    "IOB" : {
+
+    },
     "It can be set as low as %1$@. It can be set as high as %2$@." : {
       "comment" : "Guardrail info text format",
       "localizations" : {
@@ -18522,6 +18543,9 @@
         }
       }
     },
+    "Max" : {
+
+    },
     "Maximum Basal Rate" : {
       "comment" : "The title text for the maximum basal rate value",
       "extractionState" : "manual",
@@ -19417,6 +19441,9 @@
           }
         }
       }
+    },
+    "Min" : {
+
     },
     "More Info" : {
       "comment" : "Alert action title to open error help",
@@ -25408,6 +25435,9 @@
         }
       }
     },
+    "Series" : {
+
+    },
     "Slow" : {
       "comment" : "Section title for slow absorbing food",
       "localizations" : {
@@ -25699,6 +25729,9 @@
           }
         }
       }
+    },
+    "Start" : {
+
     },
     "Start Time" : {
       "comment" : "The text for the custom preset start time",
@@ -35107,6 +35140,9 @@
           }
         }
       }
+    },
+    "Zero" : {
+
     }
   },
   "version" : "1.0"

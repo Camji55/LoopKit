@@ -385,7 +385,9 @@ public final class MockCGMManager: TestingCGMManager {
 
     private let delegate = WeakSynchronizedDelegate<CGMManagerDelegate>()
 
-    private let lockedDataSource = Locked(MockCGMDataSource(model: .noData))
+    // Default to producing a sine curve so a freshly added CGM Simulator immediately
+    // provides glucose data, matching the fallback used when restoring saved state.
+    private let lockedDataSource = Locked(MockCGMDataSource(model: .sineCurve(parameters: (baseGlucose: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 110), amplitude: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 20), period: TimeInterval(hours: 6), referenceDate: Date()))))
     public var dataSource: MockCGMDataSource {
         get {
             lockedDataSource.value

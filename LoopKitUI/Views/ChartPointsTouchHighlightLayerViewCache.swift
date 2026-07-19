@@ -7,111 +7,86 @@
 //
 
 import Foundation
-import SwiftCharts
+import SwiftUI
 import UIKit
 
-final class ChartPointsTouchHighlightLayerViewCache {
-    private lazy var containerView = UIView(frame: .zero)
 
-    private lazy var xAxisOverlayView = UIView()
+/// The touch-interaction state of a chart, driven by an external `UIGestureRecognizer`
+/// and observed by the hosted Swift Charts view to draw the highlight overlay.
+final class ChartHighlightModel: ObservableObject {
+    /// The gesture's location in the hosted chart view's coordinate space, or nil when inactive
+    @Published var touchLocation: CGPoint?
+}
 
-    private lazy var point = ChartPointEllipseView(center: .zero, diameter: 16)
 
-    private lazy var labelY: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.monospacedDigitSystemFont(ofSize: 15, weight: UIFont.Weight.bold)
+/// Connects an externally-owned gesture recognizer (long-press on the table view or chart
+/// container) to a hosted chart's highlight model, translating touches into chart-local
+/// coordinates. Each chart in a stack listens to the same recognizer, so touching one chart
+/// highlights the matching time across all of them, as with the previous SwiftCharts layers.
+final class ChartGestureBridge: NSObject {
+    let model = ChartHighlightModel()
 
-        return label
-    }()
+    private weak var hostView: UIView?
+    private weak var gestureRecognizer: UIGestureRecognizer?
 
-    private lazy var labelX: UILabel = {
-        let label = UILabel()
-        label.font = self.axisLabelSettings.font
-        label.textColor = self.axisLabelSettings.fontColor
+    func attach(to gestureRecognizer: UIGestureRecognizer?, hostView: UIView) {
+        self.hostView = hostView
 
-        return label
-    }()
+        if let oldRecognizer = self.gestureRecognizer, oldRecognizer !== gestureRecognizer {
+            oldRecognizer.removeTarget(self, action: nil)
+        }
 
-    private let axisLabelSettings: ChartLabelSettings
+        guard let gestureRecognizer = gestureRecognizer else {
+            self.gestureRecognizer = nil
+            return
+        }
 
-    private(set) var highlightLayer: ChartPointsTouchHighlightLayer<ChartPoint, UIView>!
+        if self.gestureRecognizer !== gestureRecognizer {
+            gestureRecognizer.addTarget(self, action: #selector(handleGesture(_:)))
+            self.gestureRecognizer = gestureRecognizer
+        }
+    }
 
-    init(xAxisLayer: ChartAxisLayer, yAxisLayer: ChartAxisLayer, axisLabelSettings: ChartLabelSettings, chartPoints: [ChartPoint], tintColor: UIColor, gestureRecognizer: UIGestureRecognizer? = nil, onCompleteHighlight: (() -> Void)? = nil) {
+    @objc private func handleGesture(_ recognizer: UIGestureRecognizer) {
+        guard let hostView = hostView, hostView.window != nil else {
+            return
+        }
 
-        self.axisLabelSettings = axisLabelSettings
+        switch recognizer.state {
+        case .began, .changed:
+            model.touchLocation = recognizer.location(in: hostView)
+        case .ended, .cancelled, .failed, .possible:
+            model.touchLocation = nil
+        @unknown default:
+            model.touchLocation = nil
+        }
+    }
+}
 
-        highlightLayer = ChartPointsTouchHighlightLayer(
-            xAxis: xAxisLayer.axis,
-            yAxis: yAxisLayer.axis,
-            chartPoints: chartPoints,
-            gestureRecognizer: gestureRecognizer,
-            onCompleteHighlight: onCompleteHighlight,
-            modelFilter: { (screenLoc, chartPointModels) -> ChartPointLayerModel<ChartPoint>? in
-                if let index = chartPointModels.map({ $0.screenLoc.x }).findClosestElementIndex(matching: screenLoc.x) {
-                    return chartPointModels[index]
-                } else {
-                    return nil
-                }
-            },
-            viewGenerator: { [weak self] (chartPointModel, layer, chart) -> UIView? in
-                guard let strongSelf = self else {
-                    return nil
-                }
 
-                let containerView = strongSelf.containerView
-                containerView.frame = chart.contentView.bounds
-                containerView.alpha = 1  // This is animated to 0 when touch last ended
+/// The data a chart exposes for the touch-highlight overlay
+struct ChartHighlightSpec {
+    /// Candidate points, ordered by date; the point nearest the touch's x-position is highlighted
+    let points: [ChartPoint]
 
-                let xAxisOverlayView = strongSelf.xAxisOverlayView
-                if xAxisOverlayView.superview == nil {
-                    xAxisOverlayView.frame = CGRect(
-                        origin: CGPoint(x: containerView.bounds.minX,
-                                        y: containerView.bounds.maxY + 1), // Don't clip X line
-                        size: xAxisLayer.frame.size
-                    )
-                    xAxisOverlayView.backgroundColor = .systemBackground
-                    xAxisOverlayView.isOpaque = true
-                    containerView.addSubview(xAxisOverlayView)
-                }
+    /// The color of the highlight dot and value label
+    let tintColor: UIColor
+}
 
-                let point = strongSelf.point
-                point.center = chartPointModel.screenLoc
-                if point.superview == nil {
-                    point.fillColor = tintColor.withAlphaComponent(0.5)
-                    containerView.addSubview(point)
-                }
 
-                if let text = chartPointModel.chartPoint.y.labels.first?.text {
-                    let label = strongSelf.labelY
-
-                    label.text = text
-                    label.sizeToFit()
-                    label.center.y = containerView.frame.minY - 21
-                    label.center.x = chartPointModel.screenLoc.x
-                    label.frame.origin.x = min(max(label.frame.origin.x, containerView.bounds.minX), containerView.bounds.maxX - label.frame.size.width)
-                    label.frame.origin.makeIntegralInPlaceWithDisplayScale(chart.view.traitCollection.displayScale)
-
-                    if label.superview == nil {
-                        label.textColor = tintColor
-
-                        containerView.addSubview(label)
-                    }
-                }
-
-                if let text = chartPointModel.chartPoint.x.labels.first?.text {
-                    let label = strongSelf.labelX
-                    label.text = text
-                    label.sizeToFit()
-                    label.center = CGPoint(x: chartPointModel.screenLoc.x, y: xAxisOverlayView.center.y)
-                    label.frame.origin.makeIntegralInPlaceWithDisplayScale(chart.view.traitCollection.displayScale)
-
-                    if label.superview == nil {
-                        containerView.addSubview(label)
-                    }
-                }
-                
-                return containerView
-            }
-        )
+enum ChartHosting {
+    /// Wraps a SwiftUI chart in a plain UIView for display inside `ChartContainerView`.
+    ///
+    /// Chart generation is always initiated from UIKit layout on the main thread.
+    @available(iOS 16.0, *)
+    static func view<Content: View>(frame: CGRect, rootView: Content) -> UIView {
+        return MainActor.assumeIsolated {
+            let contentView = UIHostingConfiguration { rootView }
+                .margins(.all, 0)
+                .makeContentView()
+            contentView.frame = frame
+            contentView.backgroundColor = .clear
+            return contentView
+        }
     }
 }

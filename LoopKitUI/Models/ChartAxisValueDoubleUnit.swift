@@ -6,26 +6,64 @@
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
-import UIKit
-import SwiftCharts
+import Foundation
+import LoopKit
 
 
-public final class ChartAxisValueDoubleUnit: ChartAxisValueDouble {
-    let unitString: String
+/// A formatted value plotted on a chart.
+///
+/// `scalar` is the value in plot space (for most charts this is the actual value; the dose
+/// chart plots values in a signed-log space), and `label` is the localized display text
+/// shown when the point is highlighted (e.g. "115 mg/dL").
+public struct ChartValue: Equatable, CustomStringConvertible {
+    public let scalar: Double
+    public let label: String
 
-    public init(_ double: Double, unitString: String, formatter: NumberFormatter) {
-        self.unitString = unitString
-
-        super.init(double, formatter: formatter)
+    public init(scalar: Double, label: String) {
+        self.scalar = scalar
+        self.label = label
     }
 
-    init(_ double: Double, unitString: String) {
-        self.unitString = unitString
-
-        super.init(double)
+    public init(scalar: Double, unitString: String? = nil, formatter: NumberFormatter) {
+        self.init(scalar: scalar, actual: scalar, unitString: unitString, formatter: formatter)
     }
 
-    override public var description: String {
-        return formatter.string(from: scalar, unit: unitString) ?? ""
+    public init(scalar: Double, actual: Double, unitString: String? = nil, formatter: NumberFormatter) {
+        self.scalar = scalar
+
+        if let unitString = unitString {
+            self.label = formatter.string(from: actual, unit: unitString) ?? ""
+        } else {
+            self.label = formatter.string(from: NSNumber(value: actual)) ?? ""
+        }
+    }
+
+    public var description: String {
+        return label
+    }
+}
+
+
+/// A single date-stamped point charted by one of the Loop charts.
+public struct ChartPoint: Equatable {
+    /// The date of the value, or nil for points that only participate in axis scaling.
+    public let date: Date?
+
+    public let y: ChartValue
+
+    public init(date: Date?, y: ChartValue) {
+        self.date = date
+        self.y = y
+    }
+
+    public init(date: Date?, value: Double) {
+        self.init(date: date, y: ChartValue(scalar: value, label: ""))
+    }
+}
+
+
+extension ChartPoint: TimelineValue {
+    public var startDate: Date {
+        return date ?? Date.distantPast
     }
 }

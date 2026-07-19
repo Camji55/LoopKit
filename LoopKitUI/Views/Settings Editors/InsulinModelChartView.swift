@@ -21,7 +21,7 @@ struct InsulinModelChartView: UIViewRepresentable {
     func makeUIView(context: Context) -> ChartContainerView {
         let view = ChartContainerView()
         view.chartGenerator = { [chartManager] frame in
-            chartManager.chart(atIndex: 0, frame: frame)?.view
+            chartManager.chart(atIndex: 0, frame: frame)
         }
         return view
     }

@@ -9,7 +9,6 @@
 import XCTest
 import HealthKit
 import LoopKit
-import SwiftCharts
 @testable import LoopKitUI
 
 class PredictedGlucoseChartTests: XCTestCase {

@@ -22,10 +22,6 @@ let package = Package(
             targets: ["LoopKitUI"]),
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/ivanschuetz/SwiftCharts",
-            branch: "master"
-        )
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -38,14 +34,14 @@ let package = Package(
             path: "LoopKit"),
         .testTarget(
             name: "LoopKitTests",
-            dependencies: ["LoopKitUI", "LoopKit", "SwiftCharts"],
+            dependencies: ["LoopKitUI", "LoopKit"],
             path: "LoopKitTests",
             resources: [
                 .copy("Fixtures")
             ]),
         .target(
             name: "LoopKitUI",
-            dependencies: ["LoopKit", "SwiftCharts"],
+            dependencies: ["LoopKit"],
             path: "LoopKitUI"),
         .target(
             name: "LoopTestingKit",
